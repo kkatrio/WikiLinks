@@ -3,23 +3,27 @@ import json
 from scrap_wikipedia import Wiki_scrapper
 
 
-def post_tweet():
+def post_tweet(content, api):
     try:
-        #status = api.PostUpdate(content)
+        status = api.PostUpdate(content)
         print('ok')
     except UnicodeDecodeError:
         print("Your message could not be encoded.  Perhaps it contains non-ASCII characters? ")
         print("Try explicitly specifying the encoding with the --encoding flag")
         sys.exit(2)
-        print("{0} just posted: {1}".format(status.user.name, status.text))
+    print("{0} just posted: {1}".format(status.user.name, status.text))
 
-def process_tweet(content):
+def print_tweet(content):
     print(content)
 
 def get_last_link(scrapper, api):
-    statuses = api.GetUserTimeline(screen_name='bitonic5000')
-    return scrapper.retrieve_last_node(statuses)
+    statuses = api.GetUserTimeline(screen_name='WikiLinkedList')
 
+    # get the text of the last posted tweet
+    last_status = statuses[0]
+    last_text = last_status.text
+    title_text = last_text.split(' -')[0]
+    return title_text
 
 def main():
     # get twiter credentials
@@ -32,21 +36,18 @@ def main():
                       access_token_key=data['access token key'],
                       access_token_secret=data['access token secret'])
 
-
     scrapper = Wiki_scrapper()
-
 
     # get last tweet
     last_page = get_last_link(scrapper, api)
-    print(last_page)
 
-    # scrap article from last link
     try:
+        # scrap article from last link
         content = scrapper.wiki_content(last_page)
-        process_tweet(content)
+        # post new
+        post_tweet(content, api)
     except AssertionError:
         print("Can't scrap wiki page")
-
 
 if __name__ == "__main__":
     main()
