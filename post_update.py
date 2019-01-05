@@ -1,23 +1,9 @@
 import twitter
 import json
 import scrap_wikipedia
-import wikipediaapi
-
-
-filename = 'cred.json'
-with open(filename) as f:
-    data = json.load(f)
-
-api = twitter.Api(consumer_key=data['consumer key'],
-                  consumer_secret=data['consumer secret'],
-                  access_token_key=data['access token key'],
-                  access_token_secret=data['access token secret'])
 
 
 def post_tweet():
-
-    #content =
-
     try:
         #status = api.PostUpdate(content)
         print('ok')
@@ -34,6 +20,15 @@ def get_last_link():
     statuses = api.GetUserTimeline(screen_name='bitonic5000')
     return scrap_wikipedia.retrieve_last_node(statuses)
 
+# main
+filename = 'cred.json'
+with open(filename) as f:
+    data = json.load(f)
+
+api = twitter.Api(consumer_key=data['consumer key'],
+                  consumer_secret=data['consumer secret'],
+                  access_token_key=data['access token key'],
+                  access_token_secret=data['access token secret'])
 
 # get last tweet
 last_page = get_last_link()
@@ -42,7 +37,6 @@ print(last_page)
 # scrap article from last link
 try:
     content = scrap_wikipedia.wiki_content(last_page)
+    process_tweet(content)
 except AssertionError:
     print("Can't scrap wiki page")
-
-process_tweet(content)
