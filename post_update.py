@@ -1,6 +1,6 @@
 import twitter
 import json
-import scrap_wikipedia
+from scrap_wikipedia import Wiki_scrapper
 
 
 def post_tweet():
@@ -16,27 +16,37 @@ def post_tweet():
 def process_tweet(content):
     print(content)
 
-def get_last_link():
+def get_last_link(scrapper, api):
     statuses = api.GetUserTimeline(screen_name='bitonic5000')
-    return scrap_wikipedia.retrieve_last_node(statuses)
+    return scrapper.retrieve_last_node(statuses)
 
-# main
-filename = 'cred.json'
-with open(filename) as f:
-    data = json.load(f)
 
-api = twitter.Api(consumer_key=data['consumer key'],
-                  consumer_secret=data['consumer secret'],
-                  access_token_key=data['access token key'],
-                  access_token_secret=data['access token secret'])
+def main():
+    # get twiter credentials
+    filename = 'cred.json'
+    with open(filename) as f:
+        data = json.load(f)
 
-# get last tweet
-last_page = get_last_link()
-print(last_page)
+    api = twitter.Api(consumer_key=data['consumer key'],
+                      consumer_secret=data['consumer secret'],
+                      access_token_key=data['access token key'],
+                      access_token_secret=data['access token secret'])
 
-# scrap article from last link
-try:
-    content = scrap_wikipedia.wiki_content(last_page)
-    process_tweet(content)
-except AssertionError:
-    print("Can't scrap wiki page")
+
+    scrapper = Wiki_scrapper()
+
+
+    # get last tweet
+    last_page = get_last_link(scrapper, api)
+    print(last_page)
+
+    # scrap article from last link
+    try:
+        content = scrapper.wiki_content(last_page)
+        process_tweet(content)
+    except AssertionError:
+        print("Can't scrap wiki page")
+
+
+if __name__ == "__main__":
+    main()
