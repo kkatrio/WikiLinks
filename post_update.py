@@ -18,7 +18,7 @@ def post_tweet(content, api):
 def print_tweet(content):
     print(content)
 
-def get_last_link(scrapper, api):
+def get_last_link(api):
     statuses = api.GetUserTimeline(screen_name='WikiLinkedList')
 
     # get the text of the last posted tweet
@@ -41,7 +41,7 @@ def main():
     scrapper = Wiki_scrapper()
 
     # get last tweet
-    last_page = get_last_link(scrapper, api)
+    last_page = get_last_link(api)
 
     try:
         # scrap article from last link
