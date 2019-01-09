@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import twitter
 import json
 from scrap_wikipedia import Wiki_scrapper
@@ -27,7 +29,7 @@ def get_last_link(scrapper, api):
 
 def main():
     # get twiter credentials
-    filename = 'cred.json'
+    filename = '/home/kon/webbot/cred.json'
     with open(filename) as f:
         data = json.load(f)
 

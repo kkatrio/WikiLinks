@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 import twitter
 from scrap_wikipedia import Wiki_scrapper
