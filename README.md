@@ -6,6 +6,6 @@
 
 ### Basic architecture
 
-It runs as a cron job every ten minutes.
+It's running as a cron job every twenty or so minutes.
 
 It's using [wikipedia-api](https://pypi.org/project/Wikipedia-API/) to parse wikipedia articles and [python-twitter](https://github.com/bear/python-twitter) to access the twitter API.
