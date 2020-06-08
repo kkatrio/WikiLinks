@@ -16,7 +16,7 @@ api = twitter.Api(consumer_key=data['consumer key'],
                   access_token_secret=data['access token secret'])
 
 scrapper = Wiki_scrapper()
-last_page = get_last_link(scrapper, api)
+last_page = get_last_link(api)
 
 try:
     content = scrapper.wiki_content(last_page)
