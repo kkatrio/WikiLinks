@@ -24,12 +24,12 @@ def get_last_link(api):
     # get the text of the last posted tweet
     last_status = statuses[0]
     last_text = last_status.text
-    title_text = last_text.split(' -')[0]
+    title_text = last_text.split(' - https://')[0]
     return title_text
 
 def main():
     # get twiter credentials
-    filename = '/home/kon/webbot/cred.json'
+    filename = './cred.json'
     with open(filename) as f:
         data = json.load(f)
 

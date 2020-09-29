@@ -15,8 +15,8 @@ class Wiki_scrapper():
         r = self.random.randint(0, l)
         next_link = links[r]
         if ':' in next_link:
-            print('rejecting ', selected)
-            select_link(links)
+            print('rejecting ', next_link)
+            self.select_link(links)
         return next_link
 
     def wiki_content(self, link):
