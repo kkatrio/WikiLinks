@@ -9,14 +9,25 @@ class Wiki_scrapper():
         # random object
         self.wiki = wikipediaapi.Wikipedia('en')
         self.random = random
+        self.counterrors = 0
+
+    def reset(self):
+        self.counterrors = 0
 
     def select_link(self, links):
         l = len(links)
-        r = self.random.randint(0, l)
+        print("l= ", l)
+        r = self.random.randint(0, l-1)
+        print("r= ", r)
         next_link = links[r]
         if ':' in next_link:
             print('rejecting ', next_link)
+            self.counterrors += 1
+            if self.counterrors == 2: # quick escape
+                return None
             self.select_link(links)
+        if self.counterrors == 2:
+            return None
         return next_link
 
     def wiki_content(self, link):
@@ -32,6 +43,8 @@ class Wiki_scrapper():
 
         # random link
         next_link_title = self.select_link(links)
+        if next_link_title is None:
+            return None
         print("nextlink: ", next_link_title)
         # get next page
         next_page = self.wiki.page(next_link_title)

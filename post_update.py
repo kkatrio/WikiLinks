@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import os
 import twitter
 import json
 from scrap_wikipedia import Wiki_scrapper
@@ -18,18 +18,18 @@ def post_tweet(content, api):
 def print_tweet(content):
     print(content)
 
-def get_last_link(api):
+def get_link(api, i):
     statuses = api.GetUserTimeline(screen_name='WikiLinkedList')
 
     # get the text of the last posted tweet
-    last_status = statuses[0]
+    last_status = statuses[i] # 0 = last, 1 = previous
     last_text = last_status.text
     title_text = last_text.split(' - https://')[0]
     return title_text
 
 def main():
     # get twiter credentials
-    filename = './cred.json'
+    filename = os.getcwd() + '/cred.json'
     with open(filename) as f:
         data = json.load(f)
 
@@ -41,11 +41,15 @@ def main():
     scrapper = Wiki_scrapper()
 
     # get last tweet
-    last_page = get_last_link(api)
+    last_page = get_link(api, 0) # try last first
 
     try:
         # scrap article from last link
         content = scrapper.wiki_content(last_page)
+        if content is None:
+            previous_page = get_link(api, 1) # previous
+            scrapper.reset()
+            content = scrapper.wiki_content(previous_page)
         # post new
         post_tweet(content, api)
     except AssertionError:
